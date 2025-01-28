@@ -5,6 +5,10 @@ VisualStudioVersion = 17.12.35707.178
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TapoDevices", "TapoDevices\TapoDevices.csproj", "{689F6AEA-0318-40DE-A31C-BCB48AEBB1E3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "light-manager-api", "light-manager-api\light-manager-api.csproj", "{76FD4A40-932E-46AE-8AA0-E12F260B755A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "light-utility", "light-utility\light-utility.csproj", "{6288B745-2A82-4710-AF23-9CBFDE26B3AB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{689F6AEA-0318-40DE-A31C-BCB48AEBB1E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{689F6AEA-0318-40DE-A31C-BCB48AEBB1E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{689F6AEA-0318-40DE-A31C-BCB48AEBB1E3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{76FD4A40-932E-46AE-8AA0-E12F260B755A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{76FD4A40-932E-46AE-8AA0-E12F260B755A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{76FD4A40-932E-46AE-8AA0-E12F260B755A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{76FD4A40-932E-46AE-8AA0-E12F260B755A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6288B745-2A82-4710-AF23-9CBFDE26B3AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6288B745-2A82-4710-AF23-9CBFDE26B3AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6288B745-2A82-4710-AF23-9CBFDE26B3AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6288B745-2A82-4710-AF23-9CBFDE26B3AB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

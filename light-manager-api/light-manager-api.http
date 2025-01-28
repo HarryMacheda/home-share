@@ -1,0 +1,6 @@
+@light_manager_api_HostAddress = http://localhost:5209
+
+GET {{light_manager_api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
