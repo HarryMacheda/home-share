@@ -2,6 +2,7 @@
 using light_utility.Devices.Tapo;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using System.Threading.Tasks;
 using static System.Reflection.Metadata.BlobBuilder;
 
 namespace light_manager_api.Controllers.Lights
@@ -15,12 +16,15 @@ namespace light_manager_api.Controllers.Lights
         {
             foreach(TapoManager.TapoDevice device in TapoManager.GetDevices(ids))
             {
-                L530 bulb = new L530(device.Ip)
+                Task.Run(async () =>
                 {
-                    Id = device.Id
-                };
-                await bulb.Connect();
-                await bulb.On();
+                    L530 bulb = new L530(device.Ip)
+                    {
+                        Id = device.Id
+                    };
+                    await bulb.Connect();
+                    await bulb.On();
+                });
             }
 
             return Ok(true);
@@ -31,12 +35,15 @@ namespace light_manager_api.Controllers.Lights
         {
             foreach (TapoManager.TapoDevice device in TapoManager.GetDevices(ids))
             {
-                L530 bulb = new L530(device.Ip)
+                Task.Run(async () =>
                 {
-                    Id = device.Id
-                };
-                await bulb.Connect();
-                await bulb.Off();
+                    L530 bulb = new L530(device.Ip)
+                    {
+                        Id = device.Id
+                    };
+                    await bulb.Connect();
+                    await bulb.Off();
+                });
             }
 
             return Ok(true);

@@ -10,13 +10,13 @@ namespace light_utility
     {
         public enum StatusType
         {
-            Unknown,
-            Connected,
-            Offline,
-            Off,
-            On,
-            Running,
-            Error
+            Unknown = 0,
+            Connected = 1,
+            Offline = 2,
+            Off = 3,
+            On = 4,
+            Running = 5,
+            Error = 6
         }
 
         public StatusType Type { get; set; }
