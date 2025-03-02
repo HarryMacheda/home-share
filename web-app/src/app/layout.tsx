@@ -2,12 +2,9 @@
 import React from "react";
 import { PropsWithChildren } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { Drawer, List, ListItem, ListItemIcon, ListItemText,ListItemButton, CssBaseline, Box, AppBar, Toolbar, Typography, Accordion, AccordionDetails, AccordionSummary } from "@mui/material";
+import { Drawer, List, ListItem, ListItemIcon, ListItemText,ListItemButton, CssBaseline, Box, AppBar, Toolbar, Typography } from "@mui/material";
 import HomeIcon from '@mui/icons-material/Home';
 import SettingsIcon from '@mui/icons-material/Settings';
-import LightbulbIcon from '@mui/icons-material/Lightbulb';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 import MapIcon from '@mui/icons-material/Map';
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -17,17 +14,22 @@ const navItems = [
   {
     name: "Lights",
     items: [
-      { name: "Lights", href: "/lights/list", icon: <FormatListBulletedIcon/> },
+      { name: "List", href: "/lights/list", icon: <FormatListBulletedIcon/> },
       { name: "House Map", href: "/lights/map", icon: <MapIcon/> },
     ],
   },
   { name: "Settings", href: "/settings", icon: <SettingsIcon/> },
 ];
 
-const queryClient = new QueryClient()
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry:false
+    },
+  },
+})
 
 export default function Layout({ children }: PropsWithChildren) {
-  const router = useRouter();
 
   return (
     <html lang="en">
@@ -58,48 +60,38 @@ export default function Layout({ children }: PropsWithChildren) {
               <Toolbar />
               <Box sx={{ overflow: "auto" }}>
                 <List>
-                  {navItems.map((item) =>
-                    item.items ? (
-                      // Render group as an accordion
-                      <Accordion key={item.name}>
-                        <AccordionSummary
-                          expandIcon={<ExpandMoreIcon />}
-                          aria-controls={`${item.name}-content`}
-                          id={`${item.name}-header`}
-                        >
-                          <ListItemText primary={item.name} />
-                        </AccordionSummary>
-                        <AccordionDetails>
-                          <List>
-                            {item.items.map((subItem) => (
-                              <ListItem key={subItem.name} disablePadding>
-                                <ListItemButton
-                                  component={Link}
-                                  href={subItem.href}
-                                  selected={router.pathname === subItem.href}
-                                >
-                                  <ListItemIcon>{subItem.icon}</ListItemIcon>
-                                  <ListItemText primary={subItem.name} />
-                                </ListItemButton>
-                              </ListItem>
-                            ))}
-                          </List>
-                        </AccordionDetails>
-                      </Accordion>
-                    ) : (
-                      // Render standalone item
-                      <ListItem key={item.name} disablePadding>
-                        <ListItemButton
-                          component={Link}
-                          href={item.href}
-                          selected={router.pathname === item.href}
-                        >
-                          <ListItemIcon>{item.icon}</ListItemIcon>
-                          <ListItemText primary={item.name} />
-                        </ListItemButton>
+                {navItems.map((item) =>
+                  item.items ? (
+                    <React.Fragment key={item.name}>
+                      <ListItem>
+                        <ListItemText primary={item.name} />
                       </ListItem>
-                    )
-                  )}
+                      <List component="div" disablePadding>
+                        {item.items.map((subItem) => (
+                          <ListItem key={subItem.name} disablePadding>
+                            <ListItemButton
+                              component={Link}
+                              href={subItem.href}
+                            >
+                              <ListItemIcon>{subItem.icon}</ListItemIcon>
+                              <ListItemText primary={subItem.name} />
+                            </ListItemButton>
+                          </ListItem>
+                        ))}
+                      </List>
+                    </React.Fragment>
+                  ) : (
+                    <ListItem key={item.name} disablePadding>
+                      <ListItemButton
+                        component={Link}
+                        href={item.href}
+                      >
+                        <ListItemIcon>{item.icon}</ListItemIcon>
+                        <ListItemText primary={item.name} />
+                      </ListItemButton>
+                    </ListItem>
+                  )
+                )}
                 </List>
               </Box>
             </Drawer>

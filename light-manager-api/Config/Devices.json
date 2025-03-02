@@ -2,6 +2,8 @@
   {
     "Id": 1,
     "Ip": "192.168.1.221",
+    "Location": "Hallway",
+    "Name": "Hallway B",
     "Tags": {
 
     }
@@ -9,6 +11,8 @@
   {
     "Id": 2,
     "Ip": "192.168.1.187",
+    "Location": "Hallway",
+    "Name": "Hallway A",
     "Tags": {
 
     }
@@ -16,6 +20,8 @@
   {
     "Id": 3,
     "Ip": "192.168.1.171",
+    "Location": "Harry's Room",
+    "Name": "Harry's Room",
     "Tags": {
 
     }
@@ -23,6 +29,8 @@
   {
     "Id": 4,
     "Ip": "192.168.1.164",
+    "Location": "Jerry's Room",
+    "Name": "Jerry's Room",
     "Tags": {
 
     }
@@ -30,6 +38,8 @@
   {
     "Id": 5,
     "Ip": "192.168.1.136",
+    "Location": "Bathroom",
+    "Name": "Bathroom",
     "Tags": {
 
     }
@@ -37,6 +47,62 @@
   {
     "Id": 6,
     "Ip": "192.168.1.192",
+    "Location": "Lounge",
+    "Name": "Lounge Lamp",
+    "Tags": {
+
+    }
+  },
+  {
+    "Id": 7,
+    "Ip": "192.168.1.241",
+    "Location": "Kitchen",
+    "Name": "Kitchen Light A",
+    "Tags": {
+
+    }
+  },
+  {
+    "Id": 8,
+    "Ip": "192.168.1.217",
+    "Location": "Kitchen",
+    "Name": "Kitchen Light B",
+    "Tags": {
+
+    }
+  },
+  {
+    "Id": 9,
+    "Ip": "192.168.1.233",
+    "Location": "Kitchen",
+    "Name": "Kitchen Light C",
+    "Tags": {
+
+    }
+  },
+  {
+    "Id": 10,
+    "Ip": "192.168.1.223",
+    "Location": "Kitchen",
+    "Name": "Kitchen Light D",
+    "Tags": {
+
+    }
+  },
+  {
+    "Id": 11,
+    "Ip": "192.168.1.216",
+    "Location": "Izzy's Room",
+    "Name": "Izzy's Room A",
+    "Tags": {
+
+    }
+  },
+  {
+    "Id": 12,
+    "Ip": "192.168.1.249",
+    "Location": "Izzy's Room",
+    "Name": "Izzy's Room B",
     "Tags": {
 
     }

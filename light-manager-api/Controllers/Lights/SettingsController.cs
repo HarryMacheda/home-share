@@ -13,15 +13,16 @@ namespace light_manager_api.Controllers.Lights
         {
             List<L530> devices = new List<L530>();
             List<Task> tasks = new List<Task>();
-            for (int i = 0; i < TapoManager.Devices.Count; i++)
+            foreach(var device in TapoManager.Devices)
             {
                 try
                 {
-                    var device = TapoManager.Devices[i];
                     L530 bulb = new L530(device.Ip)
                     {
                         Id = device.Id
                     };
+                    bulb.Name = device.Name;
+                    bulb.Location = device.Location;
                     devices.Add(bulb);
                    
                 }
@@ -43,6 +44,7 @@ namespace light_manager_api.Controllers.Lights
             await bulb.Connect();
             await bulb.GetInfo();
             await bulb.GetStatus();
+            bulb.Location = device.Location;
             return Ok(bulb);
         }
 

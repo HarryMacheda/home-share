@@ -1,12 +1,14 @@
 "use client"
-import { Box, Button, ButtonGroup, Chip, Divider, IconButton, Skeleton, TextField, Typography } from "@mui/material";
+import { Box, Button, ButtonGroup, Chip, Divider, IconButton, Skeleton } from "@mui/material";
 import { QueryClient, useQuery, useQueryClient } from "@tanstack/react-query";
-import { PropsWithChildren, useState } from "react";
+import { useState } from "react";
 import LightModeIcon from '@mui/icons-material/LightMode';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 import PaletteIcon from '@mui/icons-material/Palette';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
+import LocationOnIcon from '@mui/icons-material/LocationOn';
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
+import RefreshIcon from '@mui/icons-material/Refresh';
 import { getContrastColour } from "@/utilities/lights";
 import { DeviceSettings } from "@/types/lights";
 import { List } from "@/components/list/list";
@@ -14,11 +16,28 @@ import { ListEntry } from "@/components/list/listitem";
 import { Ripple } from "@/components/Ripple";
 import { ColorPicker } from "@/components/ColourPicker";
 
-export default function LightList({ children }: PropsWithChildren) {
+const API_IP = "http://192.168.1.140:81"
+
+export type Light = {
+  id:number,
+  name:string,
+  location:string,
+  status:{type:number, message:string}
+  colour:{
+    red: 255,
+    green: 158,
+    blue: 216,
+    rgb: string,
+    hex: string,
+    hsb: string
+  }
+}
+
+export default function LightList() {
   const queryClient = useQueryClient();
 
   const getList = async () => {
-      const response = await fetch('https://localhost:7158/api/lights/settings/devices', {
+      const response = await fetch(API_IP + '/api/lights/settings/devices', {
           method: 'GET',
           headers: {
               'Content-Type': 'application/json',
@@ -31,14 +50,14 @@ export default function LightList({ children }: PropsWithChildren) {
   const [selected, setSelected] = useState<number[]>([]);
   const [lastSelected, setLastSelected] = useState<number | null>();
   const [colour, setColour] = useState<string>("#FF9EFB");
-  const { data, error, isLoading } = useQuery<any[], Error>({ queryKey: ['devices'], queryFn: getList});
+  const { data, isLoading } = useQuery<Light[], Error>({ queryKey: ['devices'], queryFn: getList});
 
   if(isLoading){
       return <>Loading...</>
   }
 
   const ToggleSelected = (id:number, shift:boolean) => {
-    let newValues = selected;
+    const newValues = selected;
     if(selected.includes(id)){
       newValues.splice(newValues.indexOf(id), 1);
     }
@@ -69,6 +88,17 @@ export default function LightList({ children }: PropsWithChildren) {
     setLastSelected(id);
   }
 
+  const SelectAll = () => {
+    const newValues:number[] = [];
+    data?.forEach((x) => newValues.push(x.id))
+    setSelected([...newValues])
+  }
+
+  const Refresh = () => {
+    queryClient.invalidateQueries({queryKey:["devices"]})
+    queryClient.invalidateQueries({queryKey:["device"]})
+  }
+
   return (
     <Box sx={{ overflow: "auto", paddingTop:5 }}>
         <ButtonGroup>
@@ -95,10 +125,16 @@ export default function LightList({ children }: PropsWithChildren) {
             Update colour
           </Button>
           <Button 
-            onClick={() => {setSelected([])}}
+            onClick={() => {if(selected.length < 2) {SelectAll();} else {setSelected([]);}}}
             startIcon={selected.length < 2 ? <CheckBoxIcon /> : <CheckBoxOutlineBlankIcon />}
             >
             {selected.length < 2 ? "Select All" : "Deselect All"}
+          </Button>
+          <Button 
+            onClick={() => Refresh()}
+            startIcon={<RefreshIcon />}
+            >
+            Refresh
           </Button>
         </ButtonGroup>
         <br/><br/>
@@ -107,7 +143,7 @@ export default function LightList({ children }: PropsWithChildren) {
         <List>
             {data?.map((x) =>{
                 return (
-                <Ripple>
+                <Ripple key={x.id}>
                   <div style={{height:"100%"}} onClick={(event) => ToggleSelected(x.id, event.shiftKey)}>
                     <LightEntry id={x.id} name={x.name} location={x.location} status={x.status} colour={x.colour} selected={selected.includes(x.id)}/>
                   </div>
@@ -120,11 +156,11 @@ export default function LightList({ children }: PropsWithChildren) {
 
 }
 
-function LightEntry({ id, name, location, status, colour, selected }:DeviceSettings & {selected:boolean}) {
+function LightEntry({ id, status, selected, name, location }:DeviceSettings & {selected:boolean}) {
   const queryClient = useQueryClient();
 
   const getData = async () => {
-    const response = await fetch('https://localhost:7158/api/lights/settings/device/' + id, {
+    const response = await fetch(API_IP + '/api/lights/settings/device/' + id, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -134,14 +170,30 @@ function LightEntry({ id, name, location, status, colour, selected }:DeviceSetti
     return data;
   } 
 
-  const { data, error, isLoading, refetch } = useQuery<DeviceSettings, Error>({ queryKey: ['device', id], queryFn: getData});
+  const { data, isLoading, refetch } = useQuery<DeviceSettings, Error>({ queryKey: ['device', id], queryFn: getData});
 
   if(isLoading){
     return <Skeleton variant="rounded" height={"95px"}></Skeleton>
   }
 
   if(!data){
-    return <Skeleton variant="rounded" sx={{bgcolor: '#bf6060'}} height={"95px"}></Skeleton>
+    return <ListEntry
+    title={name ?? ""}
+    description={status.message}
+    colour="#fff"
+    disabled
+    chips={
+      <Chip
+        icon={<LocationOnIcon/>}
+        label={location}
+        sx={{
+          marginTop: '8px',
+          width: 'fit-content',
+          borderRadius: '4px',
+        }}
+      />    
+    }
+  />
   }
 
   return (
@@ -151,6 +203,7 @@ function LightEntry({ id, name, location, status, colour, selected }:DeviceSetti
       colour={data.colour?.hex}
       chips={
         <Chip
+          icon={<LocationOnIcon sx={{ color: getContrastColour(data.colour?.hex) + " !important" }}/>}
           label={data.location}
           sx={{
             color:getContrastColour(data.colour?.hex),
@@ -175,7 +228,7 @@ function LightEntry({ id, name, location, status, colour, selected }:DeviceSetti
 
 
 const TurnOn = async (ids:number[], queryClient: QueryClient,) => {
-  const response = await fetch('https://localhost:7158/api/lights/on', {
+  const response = await fetch(API_IP + '/api/lights/on', {
     method: 'POST',
     headers: {
         'Content-Type': 'application/json',
@@ -188,7 +241,7 @@ const TurnOn = async (ids:number[], queryClient: QueryClient,) => {
 }
 
 const TurnOff = async (ids:number[], queryClient: QueryClient,) => {
-  const response = await fetch('https://localhost:7158/api/lights/off', {
+  const response = await fetch(API_IP + '/api/lights/off', {
     method: 'POST',
     headers: {
         'Content-Type': 'application/json',
@@ -201,7 +254,7 @@ const TurnOff = async (ids:number[], queryClient: QueryClient,) => {
 }
 
 const UpdateColour = async (ids:number[], hex:string, queryClient: QueryClient,) => {
-  const response = await fetch('https://localhost:7158/api/lights/setColour', {
+  const response = await fetch(API_IP + '/api/lights/setColour', {
     method: 'POST',
     headers: {
         'Content-Type': 'application/json',

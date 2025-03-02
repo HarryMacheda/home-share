@@ -18,7 +18,7 @@ export default function Custom404() {
         404
       </Typography>
       <Typography variant="h6" sx={{ mb: 4 }}>
-        More to come (or you're in the wrong place)
+        More to come (or you&apos;re in the wrong place)
       </Typography>
       <Link href="/" passHref>
         <Button variant="contained" color="primary">

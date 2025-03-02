@@ -17,7 +17,7 @@ namespace light_utility.Devices.Tapo
         {
             Factory = new TapoDevices.TapoDeviceFactory(username, password);
 
-            string jsonContent = File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "/config/Devices.json");
+            string jsonContent = File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "/Config/Devices.json");
             List<TapoDevice>? devices = JsonConvert.DeserializeObject<List<TapoDevice>>(jsonContent);
             if(devices != null)
             {
@@ -41,6 +41,8 @@ namespace light_utility.Devices.Tapo
             public int Id { get; set; }
             public string Ip { get; set; }
             public Dictionary<string, string> Tags { get; set; } // Assuming Tags is a dictionary
+            public string Location { get; set; }
+            public string Name { get; set; }
         }
     }
 }

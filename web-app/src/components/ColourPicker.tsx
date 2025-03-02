@@ -1,7 +1,6 @@
 import React, { useState } from "react";
-import { Popover, Box, IconButton, TextField } from "@mui/material";
+import { Popover, Box, TextField, Slider } from "@mui/material";
 import { HexColorPicker } from "react-colorful";
-import ColorLensIcon from "@mui/icons-material/ColorLens";
 import { desaturateHex, getContrastColour } from "@/utilities/lights";
 
 export function ColorPicker({ defaultColor = "#6200ea", onChange, disabled }: { 
@@ -11,7 +10,6 @@ export function ColorPicker({ defaultColor = "#6200ea", onChange, disabled }: {
 }) {
   const [colour, setColour] = useState(defaultColor);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-
   const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -46,6 +44,7 @@ export function ColorPicker({ defaultColor = "#6200ea", onChange, disabled }: {
       >
         <Box p={2}>
           <HexColorPicker color={colour} onChange={handleColorChange} />
+          <Slider/>
         </Box>
       </Popover>
     </Box>
