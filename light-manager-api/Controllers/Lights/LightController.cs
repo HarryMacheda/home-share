@@ -11,6 +11,9 @@ namespace light_manager_api.Controllers.Lights
     [Route("api/lights")]
     public class LightController : Controller
     {
+        private static bool _partyRunning = false;
+
+
         [HttpPost("on")]
         public async Task<IActionResult> On(List<int> ids)
         {
@@ -101,11 +104,12 @@ namespace light_manager_api.Controllers.Lights
                 bulbs.Add(bulb);
             }
 
-            while (true)
+            _partyRunning = true;
+            while (_partyRunning)
             {
                 foreach(Colour colour in Colour.GenerateGradient(request.Hex.Select(colorString => new Colour(colorString)).ToList(), Colours))
                 {
-
+                    if (!_partyRunning) { break; }
                     await Task.WhenAll(bulbs.Select(bulb => Task.Run(async () =>
                     {
                         await bulb.SetColour(colour);
@@ -113,6 +117,12 @@ namespace light_manager_api.Controllers.Lights
                 }
             }
 
+            return Ok(true);
+        }
+        [HttpPost("cancleParty")]
+        public async Task<IActionResult> CancleParty()
+        {
+            _partyRunning = false;
             return Ok(true);
         }
 

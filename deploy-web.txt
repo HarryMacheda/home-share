@@ -1,0 +1,22 @@
+//RUN ON LOCAL
+
+@echo off
+::DEFINE PARAMETERS
+set LOCAL_DIR=E:\Source\home-share\web-app\out
+set PI_USER=pi
+set PI_IP=192.168.1.140
+set REMOTE_DIR=/home/pi/Source/Web
+
+
+::COPY FILES
+scp -r %LOCAL_DIR%\* %PI_USER%@%PI_IP%:%REMOTE_DIR%
+
+@echo on
+
+//RUN ON PI
+
+SOURCE_DIR="/home/pi/Source/Web"
+TARGET_DIR="/var/www/html/"
+
+sudo rm -rf "$TARGET_DIR"/*
+sudo mv "$SOURCE_DIR"/* "$TARGET_DIR"/

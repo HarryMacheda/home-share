@@ -125,6 +125,19 @@ export default function LightList() {
             Update colour
           </Button>
           <Button 
+            onClick={() => {UpdateColours(selected, queryClient);}}
+            disabled={selected.length < 2}
+            startIcon={<PaletteIcon />}
+          >
+            Party mode
+          </Button>
+          <Button 
+            onClick={() => {CancleParty();}}
+            startIcon={<PaletteIcon />}
+          >
+            Cancel Party
+          </Button>
+          <Button 
             onClick={() => {if(selected.length < 2) {SelectAll();} else {setSelected([]);}}}
             startIcon={selected.length < 2 ? <CheckBoxIcon /> : <CheckBoxOutlineBlankIcon />}
             >
@@ -263,6 +276,33 @@ const UpdateColour = async (ids:number[], hex:string, queryClient: QueryClient,)
   });
   const data = await response.json();
   InvalidateDevices(ids, queryClient);
+  return data;
+}
+
+const UpdateColours = async (ids:number[], queryClient: QueryClient,) => {
+  const response = await fetch(API_IP + '/api/lights/setColours', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json',
+    },
+    body:JSON.stringify({ids: ids, hex:["#ff0000","#00ff00","#0000ff"]})
+  });
+
+  const data = await response.json();
+  InvalidateDevices(ids, queryClient);
+  return data;
+}
+
+const CancleParty = async () => {
+  const response = await fetch(API_IP + '/api/lights/cancleParty', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json',
+    },
+    body:JSON.stringify("")
+  });
+
+  const data = await response.json();
   return data;
 }
 

@@ -1,0 +1,13 @@
+@echo off
+
+::DEFINE PARAMETERS
+set LOCAL_DIR=E:\Source\home-share\light-manager-api\bin\Release\net9.0\linux-arm64
+set PI_USER=pi
+set PI_IP=192.168.1.140
+set REMOTE_DIR=/home/pi/Source/LightApi
+
+
+::COPY FILES
+scp -r %LOCAL_DIR%\* %PI_USER%@%PI_IP%:%REMOTE_DIR%
+
+@echo on

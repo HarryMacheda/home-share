@@ -1,6 +1,6 @@
 import { Box, ListItem, Typography } from "@mui/material";
 import { ReactNode } from "react";
-import { desaturateHex, getContrastColour } from "@/utilities/lights";
+import { getContrastColour } from "@/utilities/lights";
 import Checkbox from '@mui/material/Checkbox';
 
 export type ListItemProps = {
